@@ -1,2 +1,16 @@
-# open5gs_kamailio
-Step-By-Step instruction to setup VoLTE with Kamailio(as an IMS core), Open5GS(as a LTE core network) and srsRAN(as a LTE RAN)
+# [VoLTE Setup](https://github.com/ryantheelder/open5gs_kamailio)
+
+## Introduction
+The following content is from [Ericsson](https://www.ericsson.com/en/volte). you can aslo read more in [Wikipedia](https://en.wikipedia.org/wiki/Voice_over_LTE).
+### What is VoLTE?
+VoLTE (voice over LTE) is the foundation for evolving mobile voice and communication services for packet switched 4G, Wi-Fi and 5G networks. It is the mainstream mobile network technology for enabling globally interoperable voice and communication services, using IP Multimedia Subsystem (IMS). VoLTE enables high-quality and seamless HD voice services across a multitude of devices like smartphones, smartwatches and enterprise end-points. IMS also enables 5G voice and communication services.
+
+### What are the benefits of VoLTE?​
+
+
+
+* VoLTE enables improved and innovative voice and communication services across smartphones, wearables, smart speakers, other devices and enterprise end-points over LTE, Wi-Fi and 5G networks​
+* It provides a foundation for improving business and enterprise collaboration services in combination with high-quality mobile voice services​
+* VoLTE provides telecom grade services for consumers, businesses, enterprises and industries and is deployed with cloud-based solutions ​
+
+
