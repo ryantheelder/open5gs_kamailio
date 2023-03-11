@@ -14,3 +14,15 @@ VoLTE (voice over LTE) is the foundation for evolving mobile voice and communica
 * VoLTE provides telecom grade services for consumers, businesses, enterprises and industries and is deployed with cloud-based solutions ​
 
 
+## Tested Setup
+**Host Machine:**
+```console
+foo@bar:~$ lsb_release -a
+Distributor ID: Ubuntu
+Description:    Ubuntu 18.04.6 LTS
+Release:        18.04
+Codename:       bionic
+```
+**Software Defined Radio (SDR)**:
+
+[Ettus USRP B210](https://www.ettus.com/all-products/ub210-kit/): No clock is used.
