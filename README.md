@@ -130,6 +130,7 @@ $ sudo make Q=0 all | tee make_all.txt
 .
 make[2]: Leaving directory '/usr/local/src/kamailio/src/modules/counters'
 make[1]: Leaving directory '/usr/local/src/kamailio/src'
+$
 ```
 Finally install kamailio as follow:
 ```console
@@ -141,17 +142,89 @@ The binaries and executable scripts are installed in: /usr/local/sbin: you can c
 $ ls /usr/local/sbin
 ... kamailio  kamcmd  kamctl  kamdbctl ...
 ```
-To be able to use the binaries from command line (from whichever directory you're in), make sure that /usr/local/sbin is set in PATH environment variable. You can check that with echo $PATH. If not and you are using bash, open /root/.bash_profile (```sudo nano /root/.bash_profile```) and at **the end** add the following content:
+To be able to use the binaries from command line (from whichever directory you're in), make sure that /usr/local/sbin is set in PATH environment variable. You can check that with echo $PATH. as follow (You sould be able to see if /usr/local/sbin exists):
+```console
+$ echo $PATH
+... : ... :  /usr/local/sbin: ... : ...
+```
+
+ If not and you are using bash, open /root/.bash_profile (```sudo nano /root/.bash_profile```) and at **the end** add the following content:
 ```console
 PATH=$PATH:/usr/local/sbin
 export PATH
 ```
-* Kamailio modules are installed at: /usr/local/lib64/kamailio/modules
+Note that:
+* Kamailio modules are installed at: **/usr/local/lib64/kamailio/modules**
 
-* The documentation and readme files are installed at: /usr/local/share/doc/kamailio
+* The documentation and readme files are installed at: **/usr/local/share/doc/kamailio**
 
-* **The configuration files** are installed at: /usr/local/etc/kamailio
+* **The configuration files** are installed at: **/usr/local/etc/kamailio**
+
+In case you set the PREFIX variable in make cfg command, then replace /usr/local in all paths above with the value of PREFIX in order to locate the files installed.
+
+## **Populate MySQL database using kamctlrc command**
+Edit SIP_DOMAIN and DBENGINE in the **/usr/local/etc/kamailio/kamctlrc** configuration file (Used by kamctl and kamdbctl tools) as follow:
+
+1. open the file withe nano or any editor:
+```console
+$ sudo nano /usr/local/etc/kamailio/kamctlrc
+```
+2. Add or uncomment(then edit) these parts of the file:
 
 ```
-In case you set the PREFIX variable in make cfg command, then replace /usr/local in all paths above with the value of PREFIX in order to locate the files installed.
+.
+.
+.
+SIP_DOMAIN=ims.mnc001.mcc001.3gppnetwork.org
+DBENGINE=MYSQL
+.
+.
+.
+```
+Note that **SIP_DOMAIN** is SIP service domain (or IP address if you don’t have a DNS hostname associated with your SIP service). You can also edit other parts of the file as you want.
+
+Once you are done updating **kamctlrc** file, run the script to create the database used by Kamailio (When prompted for mysql root user password enter the root password if its is set or else **leave it blank** i.e. **Press Enter**):
+```console
+$ sudo kamdbctl create
+```
+check database manually;
+```console
+$ sudo mysql
+<mysql> show databases;
+<mysql> use kamailio;
+<mysql> show tables;
+<mysql> select * from subscriber;
+```
+Note that No Subscribers are added yet.
+
+## **Edit /etc/default/rtpproxy file as follows:**
+1. open rtpproxy file located in **/etc/default/rtpproxy** as follows:
+
+```console
+$ sudo nano /etc/default/rtpproxy
+```
+2. change the whole file to be like bellow:
+
+```
+# Defaults for rtpproxy
+
+# The control socket.
+#CONTROL_SOCK="unix:/var/run/rtpproxy/rtpproxy.sock"
+# To listen on an UDP socket, uncomment this line:
+#CONTROL_SOCK=udp:127.0.0.1:22222
+CONTROL_SOCK=udp:127.0.0.1:7722
+
+# Additional options that are passed to the daemon.
+EXTRA_OPTS="-l 172.24.15.30 -d DBUG:LOG_LOCAL0"
+```
+where  yoou should change **172.24.15.30**  with your public IP. To determine your public IP:
+```console
+$ sudo apt install curl
+$ curl icanhazip.com
+Your public IP
+$
+```
+Then run,
+```console
+sudo systemctl restart rtpproxy
 ```
