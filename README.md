@@ -372,3 +372,32 @@ $ sudo systemctl status kamailio.service
 مارس 14 00:10:23 5gl systemd[1]: Started LSB: Start the Kamailio SIP proxy server.
 
 ```
+You can also check everything is right with the following command:
+```console
+$ sudo ps axw | egrep kamailio
+ 6689 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6690 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6691 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6692 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6693 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6694 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6695 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6696 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6697 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6698 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6699 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6700 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6701 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6702 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6703 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6704 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6705 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6706 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6707 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6708 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6709 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6710 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6711 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6712 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+ 6852 pts/2    S+     0:00 grep -E --color=auto kamailio
+```
