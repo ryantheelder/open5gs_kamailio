@@ -466,5 +466,160 @@ mysql> show tables;
 | xcap            |
 +-----------------+
 10 rows in set (0.00 sec)
+mysql> exit
+Bye
 ```
-You can do the same for other databses(icscf and scscf) as above. (better to check if everything is alright)
+You can do the same for other databses (icscf and scscf) as above
+(better to check if everything is alright)
+.
+Then, repeat following steps:
+
+NOTE: Do not copy/paste Query OK, 0 rows affected, 1 warning (0.00 sec) !!!
+```console
+$ sudo mysql
+mysql> grant delete,insert,select,update on pcscf.* to pcscf@localhost identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.00 sec) (you should get back this if everything is ok)
+mysql> grant delete,insert,select,update on scscf.* to scscf@localhost identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> grant delete,insert,select,update on icscf.* to icscf@localhost identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> grant delete,insert,select,update on icscf.* to provisioning@localhost identified by 'provi';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> GRANT ALL PRIVILEGES ON pcscf.* TO 'pcscf'@'%' identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> GRANT ALL PRIVILEGES ON scscf.* TO 'scscf'@'%' identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> GRANT ALL PRIVILEGES ON icscf.* TO 'icscf'@'%' identified by 'heslo';
+Query OK, 0 rows affected, 1 warning (0.01 sec)
+mysql> GRANT ALL PRIVILEGES ON icscf.* TO 'provisioning'@'%' identified by 'provi';
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+mysql> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.00 sec)
+mysql> exit
+Bye
+```
+Then:
+
+```console
+$ sudo mysql
+mysql> use icscf;
+mysql> INSERT INTO `nds_trusted_domains` VALUES (1,'ims.mnc001.mcc001.3gppnetwork.org');
+mysql> INSERT INTO `s_cscf` VALUES (1,'First and only S-CSCF','sip:scscf.ims.mnc001.mcc001.3gppnetwork.org:6060');
+mysql> INSERT INTO `s_cscf_capabilities` VALUES (1,1,0),(2,1,1);
+mysql> exit
+```
+
+## **Copy pcscf, icscf and scscf configuration files to** /etc **folder and edit accordingly**
+```console
+$ cd ~ && git clone https://github.com/herlesupreeth/Kamailio_IMS_Config
+$ cd Kamailio_IMS_Config
+$ cp -r kamailio_icscf /etc
+$ cp -r kamailio_pcscf /etc
+$ cp -r kamailio_scscf /etc
+```
+## **Setup the DNS for resolving IMS and EPC components names**
+First:
+```console
+$ sudo apt install -y bind9
+```
+Then:
+```console 
+$ cd /etc/bind
+```
+Then create an new file with:
+```console
+$ sudo nano ims.mnc001.mcc001.3gppnetwork.org.
+```
+
+Copy/paste content in bellow box and save the file:
+
+---
+
+**NOTE**
+
+Change the all the **172.30.75.103** IPs to your local (Private) IP!
+
+---
+
+
+
+```console
+$ORIGIN ims.mnc001.mcc001.3gppnetwork.org.
+$TTL 1W
+@                       1D IN SOA       localhost. root.localhost. (
+                                        1               ; serial
+                                        3H              ; refresh
+                                        15M             ; retry
+                                        1W              ; expiry
+                                        1D )            ; minimum
+
+                        1D IN NS        ns
+ns                      1D IN A         172.30.75.103
+
+pcscf                   1D IN A         172.30.75.103
+_sip._udp.pcscf         1D SRV 0 0 5060 pcscf
+_sip._tcp.pcscf         1D SRV 0 0 5060 pcscf
+
+icscf                   1D IN A         172.30.75.103
+_sip._udp               1D SRV 0 0 4060 icscf
+_sip._tcp               1D SRV 0 0 4060 icscf
+
+scscf                   1D IN A         172.30.75.103
+_sip._udp.scscf         1D SRV 0 0 6060 scscf
+_sip._tcp.scscf         1D SRV 0 0 6060 scscf
+
+hss                     1D IN A         172.30.75.103
+
+```
+
+
+---
+
+**NOTE**
+
+Above example DNS Zone file creates a DNS Zone file into the bind folder.
+
+---
+
+We will create another DNS zone for resolving pcrf domain as follows:
+```console 
+$ cd /etc/bind
+```
+Then create an new file with:
+```console
+$ sudo nano epc.mnc001.mcc001.3gppnetwork.org.
+```
+Copy/paste content in bellow box and save the file:
+
+---
+
+**NOTE**
+
+Change the all the **172.30.75.103** IPs to your local (Private) IP!
+
+---
+
+```
+$ORIGIN epc.mnc001.mcc001.3gppnetwork.org.
+$TTL 1W
+@                       1D IN SOA       localhost. root.localhost. (
+                                        1               ; serial
+                                        3H              ; refresh
+                                        15M             ; retry
+                                        1W              ; expiry
+                                        1D )            ; minimum
+
+                        1D IN NS        epcns
+epcns                   1D IN A         172.30.75.103
+
+pcrf                    1D IN A         127.0.0.5
+```
+
+---
+
+**NOTE**
+
+Also note that according to this DNS zone file, [PCRF](https://en.wikipedia.org/wiki/Policy_and_charging_rules_function) (a component in
+open5gs project) must have IP address of 127.0.0.5! (we later config it that way)
+
+---
