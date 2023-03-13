@@ -312,3 +312,63 @@ Create the directory for pid file:
 ```console
 $ sudo mkdir -p /var/run/kamailio
 ```
+Default setting is to run Kamailio as user kamailio and group kamailio. For that you need to create the user and set ownership
+```console
+$ sudo adduser --quiet --system --group --disabled-password \
+        --shell /bin/false --gecos "Kamailio" \
+        --home /var/run/kamailio kamailio
+
+$ sudo chown kamailio:kamailio /var/run/kamailio
+```
+
+Then you can start Kamailio using the following commands:
+```console
+$ sudo systemctl start kamailio.service
+```
+If you have done everything right, you may get an output like this if you get a status:
+```console
+$ sudo systemctl status kamailio.service
+● kamailio.service - LSB: Start the Kamailio SIP proxy server
+   Loaded: loaded (/etc/init.d/kamailio; generated)
+   Active: active (running) since Tue 2023-03-14 00:10:23 +0330; 5s ago
+     Docs: man:systemd-sysv-generator(8)
+  Process: 6670 ExecStart=/etc/init.d/kamailio start (code=exited, status=0/SUCCESS)
+    Tasks: 24 (limit: 4915)
+   CGroup: /system.slice/kamailio.service
+           ├─6689 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6690 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6691 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6692 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6693 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6694 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6695 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6696 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6697 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6698 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6699 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6700 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6701 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6702 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6703 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6704 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6705 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6706 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6707 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6708 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6709 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6710 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           ├─6711 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+           └─6712 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
+
+مارس 14 00:10:23 5gl kamailio[6670]:              *: ims.mnc001.mcc001.3gppnetwork.org:*
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6689]: INFO: rr [../outbound/api.h:52]: ob_load_api(): unable to import bind_ob - maybe module is not loaded
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6689]: INFO: rr [rr_mod.c:177]: mod_init(): outbound module not available
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6689]: INFO: <core> [main.c:2779]: main(): processes (at least): 24 - shm size: 67108864 - pkg size: 8388608
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6689]: INFO: <core> [core/udp_server.c:154]: probe_max_receive_buffer(): SO_RCVBUF is initially 212992
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6689]: INFO: <core> [core/udp_server.c:206]: probe_max_receive_buffer(): SO_RCVBUF is finally 425984
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6702]: INFO: jsonrpcs [jsonrpcs_sock.c:443]: jsonrpc_dgram_process(): a new child 0/6702
+مارس 14 00:10:23 5gl /usr/local/sbin/kamailio[6703]: INFO: ctl [io_listener.c:214]: io_listen_loop(): io_listen_loop:  using epoll_lt io watch method (config)
+مارس 14 00:10:23 5gl kamailio[6670]:    ...done.
+مارس 14 00:10:23 5gl systemd[1]: Started LSB: Start the Kamailio SIP proxy server.
+
+```
