@@ -401,3 +401,70 @@ $ sudo ps axw | egrep kamailio
  6712 ?        S      0:00 /usr/local/sbin/kamailio -f /usr/local/etc/kamailio/kamailio.cfg -P /var/run/kamailio/kamailio.pid -m 64 -M 8 -u kamailio -g kamailio
  6852 pts/2    S+     0:00 grep -E --color=auto kamailio
 ```
+
+## **Create new mysql database for pcscf, scscf and icscf, populate databases and grant permissions to respective users identified by a password**
+First, do the steps bellow in mysql environment:
+```console
+$ sudo mysql
+mysql> CREATE DATABASE  `pcscf`;
+mysql> CREATE DATABASE  `scscf`;
+mysql> CREATE DATABASE  `icscf`;
+mysql> exit
+```
+In all of the below steps, when prompted for mysql root user password, **leave it blank** i.e. **Press Enter**:
+```console
+$ cd /usr/local/src/kamailio/utils/kamctl/mysql
+$ sudo mysql -u root -p pcscf < standard-create.sql
+$ sudo mysql -u root -p pcscf < presence-create.sql
+$ sudo mysql -u root -p pcscf < ims_usrloc_pcscf-create.sql
+$ sudo mysql -u root -p pcscf < ims_dialog-create.sql
+
+$ sudo mysql -u root -p scscf < standard-create.sql
+$ sudo mysql -u root -p scscf < presence-create.sql
+$ sudomysql -u root -p scscf < ims_usrloc_scscf-create.sql
+$ sudo mysql -u root -p scscf < ims_dialog-create.sql
+$ sudo mysql -u root -p scscf < ims_charging-create.sql
+
+$ cd /usr/local/src/kamailio/misc/examples/ims/icscf
+$ sudo mysql -u root -p icscf < icscf.sql
+```
+You can Verify that following tables are present in respective databases (for example for pcscf) by logging into mysql.
+```console
+$ sudo mysql
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| icscf              |
+| kamailio           |
+| mysql              |
+| pcscf              |
+| performance_schema |
+| scscf              |
+| sys                |
++--------------------+
+8 rows in set (0.00 sec)
+mysql> use pcscf;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-----------------+
+| Tables_in_pcscf |
++-----------------+
+| active_watchers |
+| dialog_in       |
+| dialog_out      |
+| dialog_vars     |
+| location        |
+| presentity      |
+| pua             |
+| version         |
+| watchers        |
+| xcap            |
++-----------------+
+10 rows in set (0.00 sec)
+```
+You can do the same for other databses(icscf and scscf) as above. (better to check if everything is alright)
