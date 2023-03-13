@@ -226,5 +226,89 @@ $
 ```
 Then run,
 ```console
-sudo systemctl restart rtpproxy
+$ sudo systemctl restart rtpproxy
+```
+
+## **Edit configuration file to fit your requirements for the VoIP platform**
+You have to edit **kamailio.cfg** located in /usr/local/etc/kamailio/**kamailio.cfg** configuration file.
+
+Add the follwing lines after #!KAMAILIO line at the top of the config file (kamailio.cfg):
+```
+#!define WITH_MYSQL
+#!define WITH_AUTH
+#!define WITH_USRLOCDB
+#!define WITH_NAT
+```
+
+uncomment this line an change it as bellow:
+```
+auto_aliases=no
+```
+
+Uncomment this line an uncomment this line and enter the DNS domain created above as bellow:
+```
+alias="ims.mnc001.mcc001.3gppnetwork.org"   
+```
+Uncomment this line (and add another listen=... as bellow), 10.4.128.21 is Your internal IP (Private IP) and 172.24.15.30 is the Public/Floating IP (Public IP). 
+
+Depending on your network setup, You should be able to figure out your Private IP and change both values of 10.4.128.21 to your Private IP. Earlier I mentioned how to know your Public IP. change both values of 172.24.15.30 to your Public IP.
+```
+listen=udp:10.4.128.21:5060 advertise 172.24.15.30:5060
+listen=tcp:10.4.128.21:5060 advertise 172.24.15.30:5060
+```
+For my case, it would be like this:
+```
+listen=udp:172.30.75.103:5060 advertise 194.225.167.79:5060
+listen=tcp:172.30.75.103:5060 advertise 194.225.167.79:5060
+```
+
+Further, we will need to modify the rtpproxy_sock value to match the CONTROL_SOCK option we set for RTPProxy in /etc/default/rtpproxy:
+```
+modparam("rtpproxy", "rtpproxy_sock", "udp:127.0.0.1:7722")
+```
+## **The** init.d **script**
+The **init.d** script can be used to start/stop the Kamailio server in a nicer way. A sample of init.d script for Kamailio is provided at:
+
+/usr/local/src/kamailio/pkg/kamailio/deb/debian/kamailio.init
+Copy the init file into the /etc/init.d/kamailio. Then change the permissions:
+```console
+$ sudo cp /usr/local/src/kamailio/pkg/kamailio/deb/bionic/kamailio.init /etc/init.d/kamailio
+$ sudo chmod 755 /etc/init.d/kamailio
+```
+Then edit the /etc/init.d/kamailio file updating the $DAEMON and $CFGFILE values.
+first open the file like this (or any editor):
+```console
+$ sudo nano /etc/init.d/kamailio
+```
+Then find the follwing variables in the file and change them as bellow:
+```
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin
+DAEMON=/usr/local/sbin/kamailio
+CFGFILE=/usr/local/etc/kamailio/kamailio.cfg
+```
+You need to setup a configuration file in the /etc/default/ directory. This file can be found at: 
+
+**/usr/local/src/kamailio/pkg/kamailio/deb/bionic/kamailio.default**
+
+You need to rename the /etc/default/kamailio file to ‘kamailio’ after you’ve copied it. Do this as bellow:
+```console
+$ sudo cp /usr/local/src/kamailio/pkg/kamailio/deb/bionic/kamailio.default /etc/default/kamailio
+```
+Then edit this file (located at: /etc/default/kamailio) and set RUN_KAMAILIO=yes. Edit the other options as per your setup. (as bellow)
+1. Open the kamailio file located in /etc/default/kamailio with any editor. for example:
+```console
+$ sudo nano /etc/default/kamailio
+```
+2. Find the following line in the file and **uncommnet it**.
+```
+#RUN_KAMAILIO=yes
+```
+Then run:
+```console
+$ sudo systemctl daemon-reload
+```
+
+Create the directory for pid file:
+```console
+$ sudo mkdir -p /var/run/kamailio
 ```
