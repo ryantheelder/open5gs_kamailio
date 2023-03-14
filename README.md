@@ -623,3 +623,215 @@ Also note that according to this DNS zone file, [PCRF](https://en.wikipedia.org/
 open5gs project) must have IP address of 127.0.0.5! (we later config it that way)
 
 ---
+
+Then edit **/etc/bind/named.conf.local** file as follows (the whole
+content of the file should be as follows):
+```
+//
+// Do any local configuration here
+//
+
+// Consider adding the 1918 zones here, if they are not used in your
+// organization
+//include "/etc/bind/zones.rfc1918";
+
+zone "ims.mnc001.mcc001.3gppnetwork.org" {
+        type master;
+        file "/etc/bind/ims.mnc001.mcc001.3gppnetwork.org";
+};
+
+zone "epc.mnc001.mcc001.3gppnetwork.org" {
+        type master;
+        file "/etc/bind/epc.mnc001.mcc001.3gppnetwork.org";
+};
+```
+And finally edit **/etc/bind/named.conf.options** file as follows
+(the whole content of the file should be as follows):
+```
+options {
+        directory "/var/cache/bind";
+
+        // If there is a firewall between you and nameservers you want
+        // to talk to, you may need to fix the firewall to allow multiple
+        // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+        // If your ISP provided one or more IP addresses for stable
+        // nameservers, you probably want to use them as forwarders.
+        // Uncomment the following block, and insert the addresses replacing
+        // the all-0's placeholder.
+
+        //forwarders {
+        // Put here the IP address of other DNS server which could be used if name cannot be resolved with DNS server running in this machine (Optional)
+        //10.4.128.2;
+        //};
+
+        //========================================================================
+        // If BIND logs error messages about the root key being expired,
+        // you will need to update your keys.  See https://www.isc.org/bind-keys
+        //========================================================================
+        dnssec-validation no;
+        allow-query { any; };
+
+        auth-nxdomain no;    # conform to RFC1035
+        //listen-on-v6 { any; };
+};
+```
+Now go to your connection setting and turn off Automatic DNS setting
+and just fill it with your Private IP (for my case is 172.30.75.103).
+
+---
+
+**NOTE**
+
+Don't forget to change 172.30.75.103 to your Private IP.
+
+---
+
+![alt text](https://raw.githubusercontent.com/ryantheelder/open5gs_kamailio/main/images/image.png)
+
+
+Then:
+```console
+$ sudo systemctl restart bind9
+```
+Add following entries on *top of all other entries* in **/etc/resolv.conf**
+ (make sure it persist across reboots (Google how!)):
+ 
+ ---
+ **NOTE**
+
+ make sure to change 172.30.75.103 IP to your Private IP!
+
+ ---
+
+ ```
+search ims.mnc001.mcc001.3gppnetwork.org
+nameserver 172.30.75.103
+ ```
+Finally, do the following step to make sure if dns is working:
+```console
+$ nslookup pcscf.ims.mnc001.mcc001.3gppnetwork.org
+```
+you should get a result like this (except that your Private IP is defferent):
+```console
+$ nslookup pcscf.ims.mnc001.mcc001.3gppnetwork.org
+Server:         172.30.75.103
+Address:        172.30.75.103#53
+
+Name:   pcscf.ims.mnc001.mcc001.3gppnetwork.org
+Address: 172.30.75.103
+```
+
+## **Install RTPEngine**
+```console
+$ export DEB_BUILD_PROFILES="pkg.ngcp-rtpengine.nobcg729"
+$ sudo apt install dpkg-dev
+$ cd ~
+$ git clone https://github.com/sipwise/rtpengine
+$ cd rtpengine && git checkout mr7.4.1
+```
+Then:
+```
+$ dpkg-checkbuilddeps
+```
+The above command checks for dependencies and give you a list of dependencies which are missing in the system. 
+The below list is the result of this command and we will install them:
+```console
+sudo apt install debhelper default-libmysqlclient-dev gperf iptables-dev libavcodec-dev libavfilter-dev libavformat-dev libavutil-dev libbencode-perl libcrypt-openssl-rsa-perl libcrypt-rijndael-perl libdigest-crc-perl libdigest-hmac-perl libevent-dev libhiredis-dev libio-multiplex-perl libio-socket-inet6-perl libiptc-dev libjson-glib-dev libnet-interface-perl libpcap0.8-dev libsocket6-perl libspandsp-dev libswresample-dev libsystemd-dev libxmlrpc-core-c3-dev markdown dkms module-assistant keyutils libnfsidmap2 libtirpc1 nfs-common rpcbind
+```
+After installing dependencies run the below command again and verify that no dependencies are left out.
+This should just return back to shell with no output if all depedencies are met.
+```console
+$ dpkg-checkbuilddeps
+$
+```
+Then:
+```console
+$ dpkg-buildpackage -uc -us
+```
+successful build end like tios:
+```console
+$ dpkg-buildpackage -uc -us
+.
+.
+.
+dpkg-source: info: using options from rtpengine/debian/source/options: --extend-diff-ignore=.gitreview
+dpkg-buildpackage: info: full upload; Debian-native package (full source is included)
+```
+then:
+```console
+$ cd ..
+```
+and:
+```console
+$ sudo dpkg -i *.deb
+```
+Successful installation ends with like this:
+```console
+$ sudo dpkg -i *.deb
+.
+.
+.
+Setting up ngcp-rtpengine-kernel-source (7.4.1.7+0~mr7.4.1.7) ...
+Setting up ngcp-rtpengine-recording-daemon (7.4.1.7+0~mr7.4.1.7) ...
+Setting up ngcp-rtpengine-utils (7.4.1.7+0~mr7.4.1.7) ...
+Setting up ngcp-rtpengine (7.4.1.7+0~mr7.4.1.7) ...
+Processing triggers for systemd (237-3ubuntu10.57) ...
+Processing triggers for ureadahead (0.100.0-21) ...
+Processing triggers for man-db (2.8.3-2ubuntu0.1) ...
+$
+```
+Then, run:
+```console
+$ sudo cp /etc/rtpengine/rtpengine.sample.conf /etc/rtpengine/rtpengine.conf
+```
+Then open the config file located at: **/etc/rtpengine/rtpengine.conf**.
+Edit this file as follows under [rtpengine] section:
+
+---
+
+**NOTE**
+
+Don't forget to change 172.30.75.103 to your Private IP.
+
+---
+
+```
+interface = 172.30.75.103
+```
+Then open /etc/default/ngcp-rtpengine-daemon config file and edit the 
+following line to be yes:
+```
+RUN_RTPENGINE=yes
+```
+Also edit /etc/default/ngcp-rtpengine-recording-daemon config file:
+```
+RUN_RTPENGINE_RECORDING=yes
+```
+Finally:
+```console
+$ sudo cp /etc/rtpengine/rtpengine-recording.sample.conf /etc/rtpengine/rtpengine-recording.conf
+$ sudo mkdir /var/spool/rtpengine
+$ sudo systemctl restart ngcp-rtpengine-daemon.service ngcp-rtpengine-recording-daemon.service ngcp-rtpengine-recording-nfs-mount.service
+$ sudo systemctl enable ngcp-rtpengine-daemon.service ngcp-rtpengine-recording-daemon.service ngcp-rtpengine-recording-nfs-mount.service
+$ systemctl stop rtpproxy
+$ systemctl disable rtpproxy
+$ systemctl mask rtpproxy
+```
+## **Running I-CSCF, P-CSCF and S-CSCF as separate process**
+First, stop the default kamailio SIP server:
+```console
+$ sudo systemctl stop kamailio
+$ sudo systemctl disable kamailio
+$ sudo systemctl mask kamailio
+```
+There are some chnages that you shoul make that original document from
+[open5gs](https://open5gs.org/open5gs/docs/tutorial/02-VoLTE-setup/)
+hasn't mentioned them.
+
+From now on you should be able to have multiple terminals open.
+To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wiki).
+
+```console
+
+```
