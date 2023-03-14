@@ -967,8 +967,7 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
 * In order to make VoLTE work, This process should be running. But whenever wanted to close
   the process you can hit ctrl + c :
   ``` console
-
-    # kamailio -f /etc/kamailio_scscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
+  # kamailio -f /etc/kamailio_scscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
    .
    .
    .
