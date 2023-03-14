@@ -934,7 +934,7 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
    You have to repeat step above everytime you restart your computer in order to run pcscf as bellow
 * Finally run pcscf as separate process:
   ```console
-  # kamailio -f /etc/kamailio_pcscf/kamailio_pcscf.cfg -P /kamailio_pcscf.pid -DD -E -e 
+  # kamailio -f /etc/kamailio_pcscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
   ```
 * *For now*, a successful running of SCSCF should iclude some lines like this:
     ```console
