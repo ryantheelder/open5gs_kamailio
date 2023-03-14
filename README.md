@@ -934,11 +934,11 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
    You have to repeat step above everytime you restart your computer in order to run pcscf as bellow
 * Finally run pcscf as separate process:
   ```console
-  # kamailio -f /etc/kamailio_pcscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
+  # kamailio -f /etc/kamailio_scscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
   ```
 * *For now*, a successful running of SCSCF should iclude some lines like this:
     ```console
-  # kamailio -f /etc/kamailio_pcscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e
+  # kamailio -f /etc/kamailio_scscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e
   .
   .
   .
@@ -974,3 +974,50 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
    ^C
    #
   ```
+
+3. Running ICSCF:
+* Open a terminal
+* Then:
+    ```console
+    $ sudo -i
+    # mkdir -p /var/run/kamailio_icscf
+   ```
+   ---
+   **NOTE**
+   
+   You have to repeat step above everytime you restart your computer in order to run pcscf as bellow
+* Finally run pcscf as separate process:
+  ```console
+  # kamailio -f /etc/kamailio_icscf/kamailio_icscf.cfg -P /kamailio_icscf.pid -DD -E -e 
+  ```
+* *For now*, a successful running of ICSCF should iclude some lines like this:
+    ```console
+  # kamailio -f /etc/kamailio_icscf/kamailio_icscf.cfg -P /kamailio_icscf.pid -DD -E -e
+  .
+  .
+  .
+  26(6946) INFO: cdp [receiver.c:459]: receiver_process(): receiver_process(): [hss.ims.mnc001.mcc001.3gppnetwork.org] Receiver process starting up...
+  27(6947) INFO: cdp [acceptor.c:81]: acceptor_process(): Acceptor process starting up...
+  27(6947) WARNING: cdp [tcp_accept.c:120]: create_socket(): create_socket(): Trying to open/bind/listen on 172.30.75.103 port 3869
+  28(6948) INFO: cdp [timer.c:205]: timer_process(): Timer process starting up...
+  27(6947) WARNING: cdp [tcp_accept.c:145]: create_socket(): create_socket(): Successful socket open/bind/listen on 172.30.75.103 port 3869
+  27(6947) INFO: cdp [acceptor.c:95]: acceptor_process(): Acceptor opened sockets. Entering accept loop ...
+  30(6950) INFO: jsonrpcs [jsonrpcs_sock.c:443]: jsonrpc_dgram_process(): a new child 0/6950
+  28(6948) INFO: cdp [peerstatemachine.c:526]: I_Snd_Conn_Req(): I_Snd_Conn_Req(): Peer hss.ims.mnc001.mcc001.3gppnetwork.org 
+  28(6948) INFO: cdp [receiver.c:874]: peer_connect(): peer_connect(): Trying to connect to 172.30.75.103 port 3868
+  28(6948) ERROR: cdp [receiver.c:922]: peer_connect(): peer_connect(): Error opening connection to to 172.30.75.103 port 3868 >Connection refused
+  .
+  .
+  .
+  #
+  ```
+* In order to make VoLTE work, This process should be running. But whenever wanted to close
+  the process you can hit ctrl + c :
+  ``` console
+  # kamailio -f /etc/kamailio_scscf/kamailio_scscf.cfg -P /kamailio_scscf.pid -DD -E -e 
+   .
+   .
+   .
+   ^C
+   #
+  ``
