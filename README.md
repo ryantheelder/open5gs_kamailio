@@ -828,6 +828,13 @@ $ sudo systemctl mask kamailio
 There are some chnages that you shoul make that original document from
 [open5gs](https://open5gs.org/open5gs/docs/tutorial/02-VoLTE-setup/)
 hasn't mentioned them.
+
+---
+**NOTE**
+
+**In order to make everything work, YOU **MUST** do following steps in a correct way.**
+
+---
 1. Changes in PCSCF:
 * Open /etc/kamailio_pcscf location with root access. one way to 
   do so is:
@@ -857,10 +864,53 @@ hasn't mentioned them.
   ```
 * Open **icscf.cfg** and **icscf.xml** files and replace all
   10.4.128.21 to your **Private IP** (which in my case is 172.30.75.103)
-  
+
 From now on you should be able to have multiple terminals open.
 To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wiki).
 
-```console
-
-```
+### **Let's run kamailio stuff**
+1. Running PCSCF:
+* Open a terminal
+* Then:
+    ```console
+    $ sudo -i
+    # mkdir -p /var/run/kamailio_pcscf
+   ```
+   ---
+   **NOTE**
+   
+   You have to repeat step above everytime you restart your computer in order to run pcscf as bellow
+* Finally run pcscf as separate process:
+  ```console
+  # kamailio -f /etc/kamailio_pcscf/kamailio_pcscf.cfg -P /kamailio_pcscf.pid -DD -E -e 
+  ```
+* *For now*, a successful running of kamailio should iclude some lines like this:
+  ``` console
+  # kamailio -f /etc/kamailio_pcscf/kamailio_pcscf.cfg -P /kamailio_pcscf.pid -DD -E -e 
+   .
+   .
+   .
+   0(4551) ERROR: <script>: event_route[htable:mod-init]
+   .
+   .  
+   95(4756) WARNING: cdp [tcp_accept.c:120]: create_socket(): create_socket(): Trying to open/bind/listen on 172.30.75.103 port 3871
+   95(4756) WARNING: cdp [tcp_accept.c:145]: create_socket(): create_socket(): Successful socket open/bind/listen on 172.30.75.103 port 3871
+   .
+   .
+   .
+   96(4759) WARNING: cdp [receiver.c:865]: peer_connect(): peer_connect(): Error opening connection to pcrf.epc.mnc001.mcc001.3gppnetwork.org:3868 >Name or service not known
+   .
+   .
+   .
+   98(4761) ERROR: <script>: Preloading NAT-PING. Rows: 0
+  ```
+* In order to make VoLTE work, This process should be running. But whenever wanted to close
+  the process you can hit ctrl + c:
+  ```console
+  # kamailio -f /etc/kamailio_pcscf/kamailio_pcscf.cfg -P /kamailio_pcscf.pid -DD -E -e
+  .
+  .
+  .
+  ^C
+  #
+  ```
