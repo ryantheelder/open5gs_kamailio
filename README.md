@@ -1020,4 +1020,47 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
    .
    ^C
   #
-  ``
+  ```
+
+## **Install Open5GS in the same machine as Kamailio IMS - Install Open5GS from source**
+### **Getting MongoDB**
+Import the public key used by the package management system.
+```console
+$ wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | sudo apt-key add -
+$ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+$ sudo apt-get update
+$ sudo apt-get install -y mongodb-org
+```
+Then:
+```console
+$ sudo systemctl start mongod
+```
+And then (ensure to automatically start it on system boot--> Google how!):
+```console
+$ sudo systemctl enable mongod
+```
+### **Setting up TUN device (not persistent after rebooting)**
+Create the TUN device with the interface name **ogstun3**:
+```console
+$ sudo ip tuntap add name ogstun3 mode tun
+$ sudo ip addr add 10.45.0.1/16 dev ogstun3
+$ sudo ip addr add 2001:db8:cafe::1/48 dev ogstun3
+$ sudo ip link set ogstun3 up
+```
+
+### **Building Open5GS**
+Install the dependencies for building the source code:
+```console
+$ sudo apt install python3-pip python3-setuptools python3-wheel ninja-build build-essential flex bison git cmake libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev libnghttp2-dev libmicrohttpd-dev libcurl4-gnutls-dev libnghttp2-dev libtins-dev libtalloc-dev meson
+```
+Then clone the repo. :
+```console
+$ cd ~
+$ git clone https://github.com/open5gs/open5gs
+```
+To compile with meson:
+```console
+$ cd open5gs
+$ meson build --prefix=`pwd`/install
+$ ninja -C build
+```
