@@ -972,7 +972,7 @@ To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wik
    .
    .
    ^C
-   #
+  #
   ```
 
 3. Running ICSCF:
