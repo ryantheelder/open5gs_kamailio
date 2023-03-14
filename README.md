@@ -828,7 +828,36 @@ $ sudo systemctl mask kamailio
 There are some chnages that you shoul make that original document from
 [open5gs](https://open5gs.org/open5gs/docs/tutorial/02-VoLTE-setup/)
 hasn't mentioned them.
-
+1. Changes in PCSCF:
+* Open /etc/kamailio_pcscf location with root access. one way to 
+  do so is:
+  ```console
+  $ sudo nautilus /etc/kamailio_pcscf
+  ```
+* You can see several config files:
+  ```console
+  $ ls /etc/kamailio_pcscf/
+  dispatcher.list  kamailio_pcscf.cfg  pcscf.cfg  pcscf.xml  README.md  route  sems  tls.cfg
+  ```
+* Open **pcscf.cfg** and **pcscf.xml** files and replace all
+  10.4.128.21 to your **Private IP** (which in my case is 172.30.75.103)
+2. Changes in SCSCF:
+* Open /etc/kamailio_scscf location with root access. one way to 
+  do so is:
+  ```console
+  $ sudo nautilus /etc/kamailio_scscf
+  ```
+* Open **scscf.cfg** and **scscf.xml** files and replace all
+  10.4.128.21 to your **Private IP** (which in my case is 172.30.75.103)
+3. Changes in ICSCF:
+* Open /etc/kamailio_icscf location with root access. one way to 
+  do so is:
+  ```console
+  $ sudo nautilus /etc/kamailio_icscf
+  ```
+* Open **icscf.cfg** and **icscf.xml** files and replace all
+  10.4.128.21 to your **Private IP** (which in my case is 172.30.75.103)
+  
 From now on you should be able to have multiple terminals open.
 To handle everything easily. I recommand [Tmux](https://github.com/tmux/tmux/wiki).
 
