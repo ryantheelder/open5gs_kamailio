@@ -1,0 +1,11 @@
+logger:
+    file: /home/volte/repos/open5gs/install/var/log/open5gs/nrf.log
+
+parameter:
+
+nrf:
+    sbi:
+      addr:
+        - 127.0.0.10
+        - ::1
+      port: 7777

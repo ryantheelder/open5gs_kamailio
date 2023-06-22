@@ -1,0 +1,16 @@
+logger:
+    file: /home/volte/repos/open5gs/install/var/log/open5gs/ausf.log
+
+parameter:
+
+ausf:
+    sbi:
+      - addr: 127.0.0.11
+        port: 7777
+
+nrf:
+    sbi:
+      - addr:
+          - 127.0.0.10
+          - ::1
+        port: 7777

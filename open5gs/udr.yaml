@@ -1,0 +1,18 @@
+db_uri: mongodb://localhost/open5gs
+
+logger:
+    file: /home/volte/repos/open5gs/install/var/log/open5gs/udr.log
+
+parameter:
+
+udr:
+    sbi:
+      - addr: 127.0.0.20
+        port: 7777
+
+nrf:
+    sbi:
+      - addr:
+          - 127.0.0.10
+          - ::1
+        port: 7777

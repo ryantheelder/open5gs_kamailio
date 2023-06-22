@@ -1,0 +1,30 @@
+db_uri: mongodb://localhost/open5gs
+
+logger:
+    file: /home/volte/repos/open5gs/install/var/log/open5gs/pcrf.log
+
+parameter:
+    no_ipv4v6_local_addr_in_packet_filter: true
+pcrf:
+    freeDiameter:
+      identity: pcrf.epc.mnc001.mcc001.3gppnetwork.org
+      realm: epc.mnc001.mcc001.3gppnetwork.org
+      port: 3868
+      sec_port: 5868
+      listen_on: 127.0.0.5
+      load_extension:
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx
+          conf: 0x8888
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx
+      connect:
+        - identity: smf.epc.mnc001.mcc001.3gppnetwork.org
+          addr: 127.0.0.4
+          port: 3868
+        - identity: pcscf.ims.mnc001.mcc001.3gppnetwork.org
+          addr: 172.30.68.46
+          port: 3871

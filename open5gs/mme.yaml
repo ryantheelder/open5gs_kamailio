@@ -1,0 +1,58 @@
+logger:
+    file: /home/volte/repos/open5gs/install/var/log/open5gs/mme.log
+
+parameter:
+
+mme:
+    freeDiameter:
+      identity: mme.epc.mnc001.mcc001.3gppnetwork.org
+      realm: epc.mnc001.mcc001.3gppnetwork.org
+      port: 3868
+      sec_port: 5868
+      listen_on: 127.0.0.2
+      load_extension:
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dbg_msg_dumps.fdx
+          conf: 0x8888
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_rfc5777.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_mip6i.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_nasreq.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_nas_mipv6.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_dcca.fdx
+        - module: /home/volte/repos/open5gs/install/lib/x86_64-linux-gnu/freeDiameter/dict_dcca_3gpp.fdx
+      connect:
+        - identity: hss.epc.mnc001.mcc001.3gppnetwork.org
+          addr: 127.0.0.8
+          port: 3868
+    s1ap:
+      - addr: 127.0.0.2
+    gtpc:
+      - addr: 127.0.0.2
+    gummei: 
+      plmn_id:
+        mcc: 001
+        mnc: 01
+      mme_gid: 2
+      mme_code: 1
+    tai:
+      plmn_id:
+        mcc: 001
+        mnc: 01
+      tac: 1
+    security:
+        integrity_order : [ EIA1, EIA2, EIA0 ]
+        ciphering_order : [ EEA0, EEA1, EEA2 ]
+    network_name:
+        full: Open5GS
+    mme_name: open5gs-mme0
+
+sgwc:
+    gtpc:
+      addr: 127.0.0.3
+
+smf:
+    gtpc:
+      - addr: 
+        - 127.0.0.4
+        - ::1
+
+        
